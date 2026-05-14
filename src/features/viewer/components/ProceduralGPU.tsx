@@ -8,6 +8,8 @@ interface Props {
   gpu: GPUStub
 }
 
+const c = (g: GPUStub) => g.colors
+
 const PCB_SIZE: [number, number, number] = [5.2, 0.12, 2.0]
 const SHROUD_SIZE: [number, number, number] = [5.0, 0.9, 1.9]
 const HEATSINK_FIN_COUNT = 24
@@ -26,12 +28,12 @@ export function ProceduralGPU({ gpu }: Props) {
     <group>
       <mesh name="pcb" position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={PCB_SIZE} />
-        <meshStandardMaterial color={gpu.pcbColor} roughness={0.7} metalness={0.1} />
+        <meshStandardMaterial color={c(gpu).pcb} roughness={0.7} metalness={0.1} />
       </mesh>
 
       <mesh name="shroud" position={[0, 0.55, 0]} castShadow>
         <boxGeometry args={SHROUD_SIZE} />
-        <meshStandardMaterial color={gpu.shroudColor} roughness={0.4} metalness={0.6} />
+        <meshStandardMaterial color={c(gpu).shroud} roughness={0.4} metalness={0.6} />
       </mesh>
 
       <group name="heatsink" position={[0, 1.05, 0]}>
@@ -43,8 +45,8 @@ export function ProceduralGPU({ gpu }: Props) {
         ))}
       </group>
 
-      <Fan position={[-1.4, 0.9, 0]} accent={gpu.accentColor} />
-      <Fan position={[1.4, 0.9, 0]} accent={gpu.accentColor} />
+      <Fan position={[-1.4, 0.9, 0]} accent={c(gpu).accent} />
+      <Fan position={[1.4, 0.9, 0]} accent={c(gpu).accent} />
 
       <group name="io-bracket" position={[-2.7, 0.4, 0]}>
         <mesh>

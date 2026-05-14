@@ -3,29 +3,35 @@
 import { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
-import type { GPUStub } from '@/types/gpu'
+import type { GPU } from '@/types/gpu'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { GPUScene } from './GPUScene'
 import { LoadingFallback } from './LoadingFallback'
+import { ViewerCaptureBridge } from './ViewerCaptureBridge'
+import { ViewerToolbar } from './ViewerToolbar'
 
 interface Props {
-  gpu: GPUStub
+  gpu: GPU
+  showToolbar?: boolean
 }
 
-export function GPUViewer({ gpu }: Props) {
+export function GPUViewer({ gpu, showToolbar = true }: Props) {
   return (
     <div
       className="relative w-full overflow-hidden rounded-lg bg-neutral-950"
       style={{ aspectRatio: '16 / 10' }}
     >
+      {showToolbar && <ViewerToolbar />}
       <ErrorBoundary fallback={<LoadingFallback />}>
         <Suspense fallback={<LoadingFallback />}>
           <Canvas
             shadows
             camera={{ position: [6, 4, 6], fov: 40 }}
             dpr={[1, 2]}
+            gl={{ preserveDrawingBuffer: true }}
           >
             <GPUScene gpu={gpu} />
+            {showToolbar && <ViewerCaptureBridge slug={gpu.slug} />}
             <OrbitControls
               enablePan={false}
               minDistance={3}

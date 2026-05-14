@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GPUForge
 
-## Getting Started
+Interactive 3D graphics card explorer. Inspired by [3DCellForge](https://github.com/huangserva/3DCellForge), but for GPUs instead of biological cells.
 
-First, run the development server:
+## Features (v1)
+
+- 3D viewer per GPU with orbit controls, screenshot, and GLB export
+- Gallery of 4 cards: RTX 4090, RTX 4080, RX 7900 XTX, RTX 3090
+- Spec panel (compute, memory, power, form factor, market)
+- Clickable component hotspots — die, VRAM, fan, heatsink, IO bracket, PCIe edge, power connector
+- Side-by-side `/compare` route with spec-diff table (winner highlighting per row)
+- Per-card notes, persisted to `localStorage`
+
+GPUs are rendered as procedural models built from Three.js primitives — no third-party asset sourcing required.
+
+## Stack
+
+- Next.js 16 (App Router) + React 19
+- TypeScript strict
+- React Three Fiber + Drei (three.js)
+- Zustand (notes, selection, viewer actions)
+- Tailwind v4
+
+## Develop
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
+npm run build   # production build
+npm run lint    # eslint
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Routes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `/` — gallery
+- `/gpu/[slug]` — single-card viewer + specs + notes (statically prerendered via `generateStaticParams`)
+- `/compare?a=<slug>&b=<slug>` — side-by-side comparison
 
-## Learn More
+## Phase 2 (deferred)
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+AI image-to-3D generation (Tripo / Rodin / Hunyuan3D providers) is the planned next phase. Because the app runs on Next.js, the provider proxy lives as an API route under `src/app/api/`, keeping API keys server-side.
