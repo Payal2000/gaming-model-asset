@@ -1,47 +1,48 @@
 import Link from 'next/link'
 import type { GPU } from '@/types/gpu'
-
-const VENDOR_BADGE: Record<GPU['vendor'], string> = {
-  NVIDIA: 'bg-[#76b900]/20 text-[#9bd34a] ring-[#76b900]/40',
-  AMD: 'bg-[#ed1c24]/15 text-[#ff6b70] ring-[#ed1c24]/40',
-  Intel: 'bg-blue-500/15 text-blue-300 ring-blue-500/40',
-}
+import { VendorBadge } from '@/components/ui/Badge'
 
 export function GalleryCard({ gpu }: { gpu: GPU }) {
-  const { colors } = gpu
+  const { colors, specs } = gpu
   return (
     <Link
       href={`/gpu/${gpu.slug}`}
-      className="group block overflow-hidden rounded-lg border border-neutral-800 bg-neutral-950 transition-colors hover:border-neutral-600"
+      className="group relative block overflow-hidden rounded-lg border border-border bg-bg-elevated transition-[border-color,transform] duration-[var(--duration)] ease-[var(--ease-out-quint)] hover:-translate-y-0.5 hover:border-border-strong"
     >
       <div
-        className="relative w-full"
+        className="relative w-full overflow-hidden"
         style={{
           aspectRatio: '16 / 10',
-          background: `linear-gradient(135deg, ${colors.shroud} 0%, ${colors.pcb} 100%)`,
+          background: `radial-gradient(120% 80% at 30% 20%, ${colors.shroud} 0%, ${colors.pcb} 60%, oklch(0.12 0.012 252) 100%)`,
         }}
       >
         <div
-          className="absolute inset-x-6 bottom-6 h-1 rounded-full"
-          style={{ background: colors.accent, opacity: 0.85 }}
+          className="absolute inset-x-6 bottom-5 h-[3px] rounded-full opacity-90 transition-opacity duration-[var(--duration)] group-hover:opacity-100"
+          style={{
+            background: `linear-gradient(90deg, transparent, ${colors.accent} 50%, transparent)`,
+            boxShadow: `0 0 24px ${colors.accent}`,
+          }}
         />
         <div
-          className="absolute right-4 top-4 h-3 w-3 rounded-full"
-          style={{ background: colors.accent, boxShadow: `0 0 12px ${colors.accent}` }}
+          className="absolute right-4 top-4 h-2 w-2 rounded-full"
+          style={{ background: colors.accent, boxShadow: `0 0 16px ${colors.accent}` }}
         />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/30 to-transparent" />
       </div>
       <div className="flex items-start justify-between gap-3 p-4">
-        <div>
-          <h3 className="text-sm font-semibold text-neutral-100">{gpu.name}</h3>
-          <p className="mt-0.5 text-xs text-neutral-500">
-            {gpu.specs.vramSizeGB} GB {gpu.specs.vramType} · {gpu.specs.tdpWatts} W
+        <div className="min-w-0">
+          <h3 className="truncate text-sm font-semibold tracking-tight text-fg">
+            {gpu.name}
+          </h3>
+          <p className="mt-1 font-mono text-[11px] text-fg-subtle">
+            {specs.vramSizeGB} GB {specs.vramType}
+            <span className="mx-1.5 text-fg-faint">·</span>
+            {specs.tdpWatts} W
+            <span className="mx-1.5 text-fg-faint">·</span>
+            {specs.architecture}
           </p>
         </div>
-        <span
-          className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ring-1 ${VENDOR_BADGE[gpu.vendor]}`}
-        >
-          {gpu.vendor}
-        </span>
+        <VendorBadge vendor={gpu.vendor} />
       </div>
     </Link>
   )

@@ -18,7 +18,7 @@ interface Props {
 export function GPUViewer({ gpu, showToolbar = true }: Props) {
   return (
     <div
-      className="relative w-full overflow-hidden rounded-lg bg-neutral-950"
+      className="relative w-full overflow-hidden rounded-xl border border-border bg-bg-inset"
       style={{ aspectRatio: '16 / 10' }}
     >
       {showToolbar && <ViewerToolbar />}
@@ -42,6 +42,10 @@ export function GPUViewer({ gpu, showToolbar = true }: Props) {
           </Canvas>
         </Suspense>
       </ErrorBoundary>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-[oklch(1_0_0/.04)]"
+      />
     </div>
   )
 }

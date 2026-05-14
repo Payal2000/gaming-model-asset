@@ -6,33 +6,48 @@ interface Props {
   nameB: string
 }
 
-const WIN_STYLE = 'bg-emerald-500/10 text-emerald-300 font-semibold'
-const NEUTRAL_STYLE = 'text-neutral-300'
+const WIN_CELL =
+  'bg-[oklch(0.84_0.18_142/.08)] text-[oklch(0.92_0.18_142)] font-semibold'
+const NEUTRAL_CELL = 'text-fg'
 
 export function SpecDiffTable({ rows, nameA, nameB }: Props) {
   return (
-    <div className="overflow-hidden rounded-lg border border-neutral-800">
+    <div className="overflow-hidden rounded-lg border border-border bg-bg-elevated">
       <table className="w-full text-sm">
-        <thead className="bg-neutral-900 text-xs uppercase tracking-wider text-neutral-500">
-          <tr>
-            <th className="px-3 py-2 text-left font-medium">Spec</th>
-            <th className="px-3 py-2 text-right font-medium">{nameA}</th>
-            <th className="px-3 py-2 text-right font-medium">{nameB}</th>
+        <thead className="bg-bg-elevated-2">
+          <tr className="text-[10px] uppercase tracking-[0.12em] text-fg-faint">
+            <th className="px-4 py-3 text-left font-semibold">Spec</th>
+            <th className="px-4 py-3 text-right font-semibold">{nameA}</th>
+            <th className="px-4 py-3 text-right font-semibold">{nameB}</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-neutral-800 bg-neutral-950/40">
+        <tbody className="divide-y divide-border">
           {rows.map((row) => (
-            <tr key={row.label}>
-              <td className="px-3 py-2 text-neutral-400">{row.label}</td>
+            <tr key={row.label} className="transition-colors hover:bg-bg-elevated-2/40">
+              <td className="px-4 py-2.5 text-fg-subtle">{row.label}</td>
               <td
-                className={`px-3 py-2 text-right ${row.winner === 'a' ? WIN_STYLE : NEUTRAL_STYLE}`}
+                className={`px-4 py-2.5 text-right font-mono tabular-nums ${
+                  row.winner === 'a' ? WIN_CELL : NEUTRAL_CELL
+                }`}
               >
-                {row.a}
+                <span className="inline-flex items-center gap-1.5">
+                  {row.winner === 'a' && (
+                    <span aria-hidden className="size-1.5 rounded-full bg-[oklch(0.84_0.18_142)]" />
+                  )}
+                  {row.a}
+                </span>
               </td>
               <td
-                className={`px-3 py-2 text-right ${row.winner === 'b' ? WIN_STYLE : NEUTRAL_STYLE}`}
+                className={`px-4 py-2.5 text-right font-mono tabular-nums ${
+                  row.winner === 'b' ? WIN_CELL : NEUTRAL_CELL
+                }`}
               >
-                {row.b}
+                <span className="inline-flex items-center gap-1.5">
+                  {row.winner === 'b' && (
+                    <span aria-hidden className="size-1.5 rounded-full bg-[oklch(0.84_0.18_142)]" />
+                  )}
+                  {row.b}
+                </span>
               </td>
             </tr>
           ))}

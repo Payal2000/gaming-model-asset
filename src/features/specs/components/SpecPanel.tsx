@@ -5,14 +5,16 @@ import { SpecRow } from './SpecRow'
 export function SpecPanel({ specs }: { specs: GPUSpecs }) {
   const groups = formatSpecGroups(specs)
   return (
-    <aside className="rounded-lg border border-neutral-800 bg-neutral-950/50 p-4">
-      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-neutral-400">
-        Specifications
-      </h2>
-      <div className="space-y-5">
+    <aside className="overflow-hidden rounded-lg border border-border bg-bg-elevated">
+      <div className="border-b border-border bg-bg-elevated-2/40 px-4 py-2.5">
+        <h2 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-fg-faint">
+          Specifications
+        </h2>
+      </div>
+      <div className="divide-y divide-border">
         {groups.map((group) => (
-          <div key={group.title}>
-            <h3 className="mb-1 text-xs font-semibold uppercase tracking-wider text-neutral-500">
+          <section key={group.title} className="px-4 py-3">
+            <h3 className="mb-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-fg-faint">
               {group.title}
             </h3>
             <div>
@@ -20,7 +22,7 @@ export function SpecPanel({ specs }: { specs: GPUSpecs }) {
                 <SpecRow key={row.label} row={row} />
               ))}
             </div>
-          </div>
+          </section>
         ))}
       </div>
     </aside>

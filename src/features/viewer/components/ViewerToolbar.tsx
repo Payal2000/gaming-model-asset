@@ -7,7 +7,7 @@ export function ViewerToolbar() {
   const exportGLB = useViewerActionsStore((s) => s.exportGLB)
 
   return (
-    <div className="absolute right-3 top-3 z-10 flex gap-2">
+    <div className="absolute right-3 top-3 z-10 flex gap-1.5 rounded-lg border border-border bg-bg-elevated/80 p-1 backdrop-blur-md">
       <ToolbarButton onClick={screenshot} label="PNG" title="Download screenshot" />
       <ToolbarButton onClick={exportGLB} label="GLB" title="Export 3D model" />
     </div>
@@ -27,7 +27,7 @@ function ToolbarButton({ onClick, label, title }: BtnProps) {
       onClick={onClick ?? undefined}
       disabled={!onClick}
       title={title}
-      className="rounded bg-neutral-900/80 px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-neutral-200 ring-1 ring-neutral-700 backdrop-blur-sm hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-50"
+      className="rounded-md px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-fg-muted transition-colors hover:bg-bg-elevated-2 hover:text-fg disabled:cursor-not-allowed disabled:opacity-40"
     >
       {label}
     </button>

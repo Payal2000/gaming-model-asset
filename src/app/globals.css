@@ -1,26 +1,131 @@
 @import "tailwindcss";
 
+/*
+ * GPUForge design tokens.
+ * - OKLCH for perceptually-even color steps (Tailwind v4 native).
+ * - Two surface levels (canvas, elevated) with ~4-5% lightness deltas.
+ * - 1px borders at low alpha for Linear-style separation without weight.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: oklch(0.145 0.012 252);
+  --bg-elevated: oklch(0.185 0.014 252);
+  --bg-elevated-2: oklch(0.225 0.015 252);
+  --bg-inset: oklch(0.12 0.012 252);
+
+  --fg: oklch(0.985 0 0);
+  --fg-muted: oklch(0.72 0.008 252);
+  --fg-subtle: oklch(0.55 0.012 252);
+  --fg-faint: oklch(0.4 0.012 252);
+
+  --border: oklch(1 0 0 / 0.08);
+  --border-strong: oklch(1 0 0 / 0.14);
+  --border-focus: oklch(1 0 0 / 0.22);
+
+  --accent: oklch(0.84 0.18 142);
+  --accent-fg: oklch(0.22 0.05 142);
+  --accent-ring: oklch(0.84 0.18 142 / 0.4);
+
+  --success: oklch(0.78 0.16 152);
+  --danger: oklch(0.7 0.2 25);
+
+  --radius-sm: 0.375rem;
+  --radius: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  --shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.4);
+  --shadow: 0 4px 16px -4px oklch(0 0 0 / 0.5);
+  --shadow-lg: 0 16px 48px -12px oklch(0 0 0 / 0.6);
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 120ms;
+  --duration: 200ms;
+  --duration-slow: 320ms;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-elevated-2: var(--bg-elevated-2);
+  --color-bg-inset: var(--bg-inset);
+
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-fg-faint: var(--fg-faint);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+
+  --radius-sm: var(--radius-sm);
+  --radius: var(--radius);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: dark;
+  background: var(--bg);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01", "ss03";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle radial vignette on the page background — adds depth without contrast loss. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(60% 50% at 50% 0%, oklch(1 0 0 / 0.04), transparent 70%),
+    radial-gradient(40% 30% at 100% 100%, oklch(0.84 0.18 142 / 0.04), transparent 60%);
+}
+
+/* Focus ring used by interactive primitives. */
+*:focus-visible {
+  outline: 2px solid var(--accent-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Native form controls reset for dark mode. */
+select,
+textarea,
+input {
+  color-scheme: dark;
+}
+
+/* Grid pattern utility for hero surfaces — referenced via class="bg-grid". */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, oklch(1 0 0 / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(1 0 0 / 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: center;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent 70%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -17,7 +17,7 @@ export function GPUScene({ gpu }: Props) {
       <directionalLight position={[-5, 4, -3]} intensity={0.3} color="#88aaff" />
       <Environment preset="city" />
       <ProceduralGPU gpu={gpu} />
-      <Hotspots components={gpu.components} />
+      <Hotspots components={gpu.components} accent={gpu.colors.accent} />
       <ContactShadows position={[0, -0.5, 0]} opacity={0.5} scale={10} blur={2.5} far={2} />
     </>
   )

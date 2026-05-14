@@ -26,20 +26,28 @@ export function NotesPanel({ slug }: { slug: string }) {
   }, [draft, dirty, slug, setNote])
 
   return (
-    <div className="rounded-lg border border-neutral-800 bg-neutral-950/50 p-4">
-      <div className="mb-2 flex items-center justify-between">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-neutral-400">
+    <div className="overflow-hidden rounded-lg border border-border bg-bg-elevated">
+      <div className="flex items-center justify-between border-b border-border bg-bg-elevated-2/40 px-4 py-2.5">
+        <h2 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-fg-faint">
           Notes
         </h2>
-        <span className="text-[10px] uppercase tracking-wider text-neutral-600">
-          {dirty ? 'saving…' : 'saved'}
+        <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-fg-faint">
+          <span
+            aria-hidden
+            className="size-1.5 rounded-full transition-colors"
+            style={{
+              background: dirty ? 'oklch(0.84 0.18 142)' : 'oklch(0.55 0.012 252)',
+              boxShadow: dirty ? '0 0 8px oklch(0.84 0.18 142)' : 'none',
+            }}
+          />
+          {dirty ? 'saving' : 'saved'}
         </span>
       </div>
       <textarea
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
-        placeholder="Your notes about this card (saved locally)…"
-        className="min-h-[120px] w-full resize-y rounded border border-neutral-800 bg-neutral-900 p-2 text-sm text-neutral-100 outline-none focus:border-neutral-600"
+        placeholder="Your notes about this card — saved locally."
+        className="min-h-[120px] w-full resize-y bg-transparent p-4 text-sm leading-relaxed text-fg placeholder:text-fg-faint focus:outline-none"
       />
     </div>
   )

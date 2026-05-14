@@ -2,6 +2,7 @@
 
 import { useSelectionStore } from '@/stores/selectionStore'
 import type { GPUComponentDescriptor } from '@/types/component'
+import { Tag } from '@/components/ui/Badge'
 
 interface Props {
   components: GPUComponentDescriptor[]
@@ -14,41 +15,48 @@ export function ComponentDetailCard({ components }: Props) {
 
   if (!selected) {
     return (
-      <div className="rounded-lg border border-dashed border-neutral-800 bg-neutral-950/30 p-4 text-sm text-neutral-500">
-        Click a hotspot in the viewer to inspect a component.
+      <div className="rounded-lg border border-dashed border-border bg-bg-inset/50 p-5 text-sm text-fg-subtle">
+        <p className="font-medium text-fg-muted">No component selected.</p>
+        <p className="mt-1 text-xs text-fg-faint">
+          Click a marker in the viewer to inspect a component.
+        </p>
       </div>
     )
   }
 
   return (
-    <div className="rounded-lg border border-neutral-800 bg-neutral-950/60 p-4">
-      <div className="mb-2 flex items-start justify-between gap-3">
-        <div>
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
-            {selected.kind.replace('-', ' ')}
-          </p>
-          <h3 className="mt-0.5 text-base font-semibold text-neutral-100">{selected.label}</h3>
+    <div className="overflow-hidden rounded-lg border border-border bg-bg-elevated">
+      <div className="flex items-start justify-between gap-3 border-b border-border px-4 py-3">
+        <div className="min-w-0">
+          <Tag tone="accent">{selected.kind.replace('-', ' ')}</Tag>
+          <h3 className="mt-2 text-base font-semibold tracking-tight text-fg">
+            {selected.label}
+          </h3>
         </div>
         <button
           type="button"
           onClick={() => select(null)}
-          className="rounded p-1 text-neutral-500 hover:bg-neutral-800 hover:text-neutral-200"
           aria-label="Close"
+          className="rounded-md p-1.5 text-fg-faint transition-colors hover:bg-bg-elevated-2 hover:text-fg"
         >
-          ✕
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+            <path d="M3 3L11 11M11 3L3 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
         </button>
       </div>
-      <p className="text-sm leading-relaxed text-neutral-300">{selected.description}</p>
-      {selected.details && (
-        <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1.5 text-xs">
-          {Object.entries(selected.details).map(([k, v]) => (
-            <div key={k} className="contents">
-              <dt className="text-neutral-500">{k}</dt>
-              <dd className="text-right font-medium text-neutral-100">{v}</dd>
-            </div>
-          ))}
-        </dl>
-      )}
+      <div className="px-4 py-3">
+        <p className="text-sm leading-relaxed text-fg-muted">{selected.description}</p>
+        {selected.details && (
+          <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-border pt-4 text-xs">
+            {Object.entries(selected.details).map(([k, v]) => (
+              <div key={k} className="contents">
+                <dt className="text-fg-subtle">{k}</dt>
+                <dd className="text-right font-mono tabular-nums text-fg">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+      </div>
     </div>
   )
 }
